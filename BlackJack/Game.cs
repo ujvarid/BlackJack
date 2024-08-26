@@ -12,6 +12,7 @@ namespace BlackJack
         public Game()
         {
             InitializeComponent();
+            Icon = Icon.ExtractAssociatedIcon(System.Reflection.Assembly.GetExecutingAssembly().Location);
             this.Text = "BlackJack";
             this.FormBorderStyle = FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
@@ -38,14 +39,14 @@ namespace BlackJack
             deck.Clear();
             ClearCards();
             uHitNum = 0;
-            dHitNum = 0;  // Reset dealer hit counter
+            dHitNum = 0;  
             userSum = 0;
             dealerSum = 0;
             AddAllCards();
             uCardsSum.Text = "0";
             dCardsSum.Text = "0";
             hitBtn.Enabled = true;
-            standBtn.Enabled = false;  // Disable stand button until user hits
+            standBtn.Enabled = false; 
         }
 
         private void ClearCards()
@@ -73,7 +74,7 @@ namespace BlackJack
 
         private void hitBtn_Click(object sender, EventArgs e)
         {
-            if (uHitNum == 0) { standBtn.Enabled = true; }  // Enable stand button on first hit
+            if (uHitNum == 0) { standBtn.Enabled = true; }  
 
             ++uHitNum;
             int rnd = random.Next(deck.Count);
@@ -93,7 +94,7 @@ namespace BlackJack
 
         private void ShowCard(string card, bool isUser)
         {
-            string controlName = isUser ? $"uCard{uHitNum}" : $"dCard{dHitNum}";  // Corrected to use dHitNum for dealer
+            string controlName = isUser ? $"uCard{uHitNum}" : $"dCard{dHitNum}";  
 
             var pictureBox = this.Controls.Find(controlName, true).FirstOrDefault() as PictureBox;
 
