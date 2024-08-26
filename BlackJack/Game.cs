@@ -2,6 +2,8 @@ namespace BlackJack
 {
     public partial class Game : Form
     {
+        private static int uScore = 0;
+        private static int dScore = 0;
         public static int uHitNum = 0;
         public static int dHitNum = 0;
         public static int userSum = 0;
@@ -39,14 +41,14 @@ namespace BlackJack
             deck.Clear();
             ClearCards();
             uHitNum = 0;
-            dHitNum = 0;  
+            dHitNum = 0;
             userSum = 0;
             dealerSum = 0;
             AddAllCards();
             uCardsSum.Text = "0";
             dCardsSum.Text = "0";
             hitBtn.Enabled = true;
-            standBtn.Enabled = false; 
+            standBtn.Enabled = false;
         }
 
         private void ClearCards()
@@ -74,7 +76,7 @@ namespace BlackJack
 
         private void hitBtn_Click(object sender, EventArgs e)
         {
-            if (uHitNum == 0) { standBtn.Enabled = true; }  
+            if (uHitNum == 0) { standBtn.Enabled = true; }
 
             ++uHitNum;
             int rnd = random.Next(deck.Count);
@@ -86,6 +88,8 @@ namespace BlackJack
             if (userSum > 21)
             {
                 MessageBox.Show("You Lost.");
+                ++dScore;
+                dealerScore.Text = dScore.ToString();
                 Restart();
             }
 
@@ -94,7 +98,7 @@ namespace BlackJack
 
         private void ShowCard(string card, bool isUser)
         {
-            string controlName = isUser ? $"uCard{uHitNum}" : $"dCard{dHitNum}";  
+            string controlName = isUser ? $"uCard{uHitNum}" : $"dCard{dHitNum}";
 
             var pictureBox = this.Controls.Find(controlName, true).FirstOrDefault() as PictureBox;
 
@@ -145,7 +149,7 @@ namespace BlackJack
             }
         }
 
-        private void standBtn_Click(object sender, EventArgs e)
+        private async void standBtn_Click(object sender, EventArgs e)
         {
             hitBtn.Enabled = false;
 
@@ -157,18 +161,26 @@ namespace BlackJack
                 deck.RemoveAt(rnd);
                 ShowCard(card, false);
                 ShowSum(card, false);
+
+                await Task.Delay(1000);
+                this.Refresh();
             }
 
             if (dealerSum > 21 || dealerSum < userSum)
             {
                 MessageBox.Show("You Won!");
+                ++uScore;
+                userScore.Text = uScore.ToString();
             }
             else
             {
                 MessageBox.Show("You Lost!");
+                ++dScore;
+                dealerScore.Text = dScore.ToString();
             }
 
             Restart();
         }
+
     }
 }
